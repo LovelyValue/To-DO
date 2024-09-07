@@ -127,7 +127,6 @@ legend {
 	background-color: #e5f2fa;
 	border: 2px solid #000;
 	border-radius: 10px;
-	overflow-y: scroll;
 }
 
 .modal__form {
@@ -151,6 +150,14 @@ legend {
 	border-radius: 7px;
 }
 
+.modal__tasks {
+	overflow-y: scroll;
+	scrollbar-color: #000000 transparent;
+	height: 80%;
+}
+.modal__tasks::-webkit-scrollbar-track {
+	border-radius: 5px;
+}
 .modal__task {
 	display: flex;
 	align-items: center;
