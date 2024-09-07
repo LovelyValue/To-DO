@@ -1,0 +1,181 @@
+/* Reset and base styles  */
+* {
+	padding: 0px;
+	margin: 0px;
+	border: none;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Links */
+
+a,
+a:link,
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+/* Common */
+
+aside,
+nav,
+footer,
+header,
+section,
+main {
+	display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+ul,
+ul li {
+	list-style: none;
+}
+
+img {
+	vertical-align: top;
+}
+
+img,
+svg {
+	max-width: 100%;
+	height: auto;
+}
+
+address {
+	font-style: normal;
+}
+
+/* Form */
+
+input,
+textarea,
+button,
+select {
+	font-family: inherit;
+	font-size: inherit;
+	color: inherit;
+	background-color: transparent;
+}
+
+input::-ms-clear {
+	display: none;
+}
+
+button,
+input[type="submit"] {
+	display: inline-block;
+	box-shadow: none;
+	background-color: transparent;
+	background: none;
+	cursor: pointer;
+}
+
+input:focus,
+input:active,
+button:focus,
+button:active {
+	outline: none;
+}
+
+button::-moz-focus-inner {
+	padding: 0;
+	border: 0;
+}
+
+label {
+	cursor: pointer;
+}
+
+legend {
+	display: block;
+}
+
+.modal {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal__dialog {
+	max-width: 500px;
+	margin: 40px auto;
+}
+
+.modal__content {
+	height: 700px;
+	padding: 25px;
+	background-color: #e5f2fa;
+	border: 2px solid #000;
+	border-radius: 10px;
+	overflow-y: scroll;
+}
+
+.modal__form {
+	display: flex;
+	justify-content: space-between;
+}
+
+.modal__input {
+	width: 390px;
+	margin-bottom: 70px;
+	padding: 10px 15px;
+	border: 2px solid #000;
+	border-radius: 7px;
+}
+
+.modal__btn {
+	width: 43px;
+	height: 42px;
+	background: url("../img/plus.png") center center/cover no-repeat;
+	border: 2px solid #000;
+	border-radius: 7px;
+}
+
+.modal__task {
+	display: flex;
+	align-items: center;
+	width: 400px;
+	margin: 0 auto 30px;
+	padding: 0 5px 10px;
+	border-bottom: 2px solid #000;
+}
+
+.modal__task-input {
+	width: 14px;
+	height: 14px;
+}
+
+.modal__task-delete {
+	width: 10px;
+	height: 18px;
+	background: url("../img/trash.png") center center/cover no-repeat;
+	cursor: pointer;
+}
+
+.modal__task-label {
+	margin: 0 auto 0 10px;
+}
+
+.checked {
+	text-decoration: line-through;
+}
