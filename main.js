@@ -2,9 +2,10 @@ window.addEventListener("DOMContentLoaded", () => {
 	const form = document.querySelector(".modal__form");
 
 	bindPostData(form);
+	callGetData("http://localhost:3000/requests");
 
-	const postData = async (url, data) => {
-		const res = await fetch(url, {
+	async function postData(url, data) {
+		const response = await fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-type": "application/json",
@@ -12,97 +13,89 @@ window.addEventListener("DOMContentLoaded", () => {
 			body: data,
 		});
 
-		return await res.json();
-	};
+		return await response.json();
+	}
 
 	function bindPostData(form) {
-		form.addEventListener("submit", e => {
-			e.preventDefault();
+		form.addEventListener("submit", event => {
+			event.preventDefault();
 
 			const formData = new FormData(form);
 
-			const json = JSON.stringify(Object.fromEntries(formData.entries()));
+			const jsonData = JSON.stringify(Object.fromEntries(formData.entries()));
 
-			postData("http://localhost:3000/requests", json)
-				.then(data => {
-					console.log(data);
+			postData("http://localhost:3000/requests", jsonData)
+				.then(response => {
+					console.log(response);
 				})
-				.catch(() => {
-					console.log("error");
+				.catch(error => {
+					console.log(error);
 				})
 				.finally(() => {
 					form.reset();
+					callGetData("http://localhost:3000/requests");
 				});
-
-			callGetData();
 		});
 	}
 
 	class Task {
-		constructor(descr, id, parentSelector) {
-			this.descr = descr;
+		constructor(description, id, parentSelector) {
+			this.description = description;
 			this.id = id;
-			this.parent = document.querySelector(parentSelector);
+			this.parentSelector = document.querySelector(parentSelector);
 		}
 
 		render() {
 			const element = document.createElement("li");
+			element.classList.add("modal__task");
 			element.innerHTML = `
-					<li class="modal__task">
-						<input class="modal__task-input" id="${this.id}" type="checkbox" name="${this.id}"/>
-						<label class="modal__task-label" for="${this.id}">
-							${this.descr}
-						</label>
-						<button class="modal__task-delete" type='button'></button>
-					</li>
-				`;
-			this.parent.prepend(element);
+				<input class="modal__task-input" id="${this.id}" type="checkbox" name="${this.id}"/>
+				<label class="modal__task-label" for="${this.id}">
+					${this.description}
+				</label>
+				<button class="modal__task-delete" type='button'></button>
+			`;
+			this.parentSelector.prepend(element);
 		}
 	}
 
-	const getData = async url => {
-		const res = await fetch(url);
+	async function getData(url) {
+		const response = await fetch(url);
 
-		if (!res.ok) {
-			throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-		}
+		return await response.json();
+	}
 
-		return await res.json();
-	};
-
-	function callGetData() {
-		getData("http://localhost:3000/requests").then(data => {
-			const parent = document.querySelector(".modal__tasks");
-			parent.innerHTML = ``;
-			data.forEach(({ task, id }) => {
-				new Task(task, id, ".modal__tasks").render();
+	function callGetData(url) {
+		getData(url)
+			.then(response => {
+				response.forEach(({ task, id }) => {
+					new Task(task, id, ".modal__tasks").render();
+				});
+			})
+			.catch(error => {
+				console.log(error);
 			});
-		});
 	}
 
-	callGetData();
+	// const li = document.querySelectorAll(".modal__task");
+	// const checkbox = document.querySelectorAll(".modal__task-input");
 
-	function deleteData() {
-		fetch("http://localhost:3000/requests/94b2", {
-			method: "DELETE",
-		});
-		callGetData();
-	}
-
-	document.querySelector("ul").addEventListener("change", () => {
-		const checkbox = document.querySelectorAll(".modal__task-input");
-		checkbox.forEach(item => {
-			if (item.checked) {
-				item.nextElementSibling.classList.add("checked");
-			} else {
-				item.nextElementSibling.classList.remove("checked");
-			}
-		});
-	});
-	const deleteBtn = document.querySelectorAll(".modal__task-delete");
-	deleteBtn.forEach(item => {
-		item.addEventListener("click", () => {
-			deleteData();
-		});
-	});
+	// li.forEach(item => {
+	// 	item.addEventListener("change", () => {
+	// 		console.log(0);
+	// 	});
+	// });
+	// checkbox.forEach(item => {
+	// 	console.log(1);
+	// 	item.addEventListener("click", item => {
+	// 		console.log(2);
+	// 		if (item.checked) {
+	// 			console.log(3);
+	// 			item.nextElementSibling.classList.add("checked");
+	// 		} else {
+	// 			console.log(4);
+	// 			item.nextElementSibling.classList.remove("checked");
+	// 		}
+	// 	});
+	// });
 });
