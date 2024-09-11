@@ -1,8 +1,8 @@
 window.addEventListener("DOMContentLoaded", () => {
 	const form = document.querySelector(".modal__form");
+	callGetData("http://localhost:3000/requests");
 
 	bindPostData(form);
-	callGetData("http://localhost:3000/requests");
 
 	async function postData(url, data) {
 		const response = await fetch(url, {
@@ -68,6 +68,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	function callGetData(url) {
 		getData(url)
 			.then(response => {
+				document.querySelector(".modal__tasks").innerHTML = ``;
 				response.forEach(({ task, id }) => {
 					new Task(task, id, ".modal__tasks").render();
 				});
