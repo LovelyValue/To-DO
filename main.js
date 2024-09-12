@@ -78,39 +78,9 @@ window.addEventListener("DOMContentLoaded", () => {
 			});
 	}
 
-	// const li = document.querySelectorAll(".modal__task");
-	// const checkbox = document.querySelectorAll(".modal__task-input");
-
-	// li.forEach(item => {
-	// 	item.addEventListener("change", () => {
-	// 		console.log(0);
-	// 	});
-	// });
-
-	// checkbox.forEach(item => {
-	// 	console.log(1);
-	// 	item.addEventListener("click", item => {
-	// 		console.log(2);
-	// 		if (item.checked) {
-	// 			console.log(3);
-	// 			item.nextElementSibling.classList.add("checked");
-	// 		} else {
-	// 			console.log(4);
-	// 			item.nextElementSibling.classList.remove("checked");
-	// 		}
-	// 	});
-	// });
-
-	// document.getElementById("#56fd").addEventListener("click", function (e) {
-	// 	e.target.parentNode.classList[e.target.checked ? "add" : "remove"](
-	// 		".checked"
-	// 	);
-	// });
-
-	// const check = document.querySelectorAll(".modal__task-input");
-	// check.forEach(item => {
-	// 	item.addEventListener("click", () => {
-	// 		return console.log(1);
-	// 	});
-	// });
+	document.querySelector("ul").addEventListener("click", event => {
+		if (event.target.className === "modal__task-input") {
+			event.target.nextElementSibling.classList.toggle("checked");
+		}
+	});
 });
