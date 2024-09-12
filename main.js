@@ -86,6 +86,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	// 		console.log(0);
 	// 	});
 	// });
+
 	// checkbox.forEach(item => {
 	// 	console.log(1);
 	// 	item.addEventListener("click", item => {
@@ -97,6 +98,19 @@ window.addEventListener("DOMContentLoaded", () => {
 	// 			console.log(4);
 	// 			item.nextElementSibling.classList.remove("checked");
 	// 		}
+	// 	});
+	// });
+
+	// document.getElementById("#56fd").addEventListener("click", function (e) {
+	// 	e.target.parentNode.classList[e.target.checked ? "add" : "remove"](
+	// 		".checked"
+	// 	);
+	// });
+
+	// const check = document.querySelectorAll(".modal__task-input");
+	// check.forEach(item => {
+	// 	item.addEventListener("click", () => {
+	// 		return console.log(1);
 	// 	});
 	// });
 });
