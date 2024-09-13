@@ -1,8 +1,9 @@
 window.addEventListener("DOMContentLoaded", () => {
 	const form = document.querySelector(".modal__form");
-	callGetData("http://localhost:3000/requests");
+	const ul = document.querySelector("ul");
 
 	bindPostData(form);
+	callGetData("http://localhost:3000/requests");
 
 	async function postData(url, data) {
 		const response = await fetch(url, {
@@ -78,9 +79,38 @@ window.addEventListener("DOMContentLoaded", () => {
 			});
 	}
 
-	document.querySelector("ul").addEventListener("click", event => {
-		if (event.target.className === "modal__task-input") {
-			event.target.nextElementSibling.classList.toggle("checked");
+	async function deleteData(url) {
+		const response = await fetch(url, {
+			method: "DELETE",
+		});
+		return await response.json();
+	}
+
+	ul.addEventListener("click", event => {
+		const deleteBtn = event.target.className === "modal__task-delete";
+
+		if (deleteBtn) {
+			const labelFor = event.target.previousElementSibling.htmlFor;
+
+			deleteData(`http://localhost:3000/requests/${labelFor}`)
+				.then(response => {
+					console.log(response);
+				})
+				.catch(error => {
+					console.log(error);
+				})
+				.finally(() => {
+					callGetData("http://localhost:3000/requests");
+				});
+		}
+	});
+
+	ul.addEventListener("change", event => {
+		const checkbox = event.target.className === "modal__task-input";
+
+		if (checkbox) {
+			const label = event.target.nextElementSibling;
+			label.classList.toggle("checked");
 		}
 	});
 });
