@@ -5,6 +5,7 @@ window.addEventListener("DOMContentLoaded", () => {
 	bindPostData(form);
 	callGetData("http://localhost:3000/requests");
 
+	//Отправка данных на сервер.
 	async function postData(url, data) {
 		const response = await fetch(url, {
 			method: "POST",
@@ -39,10 +40,12 @@ window.addEventListener("DOMContentLoaded", () => {
 		});
 	}
 
+	//Создание верстки на странице.
 	class Task {
-		constructor(description, id, parentSelector) {
+		constructor(description, id, checkbox, parentSelector) {
 			this.description = description;
 			this.id = id;
+			this.checkbox = checkbox;
 			this.parentSelector = document.querySelector(parentSelector);
 		}
 
@@ -50,8 +53,8 @@ window.addEventListener("DOMContentLoaded", () => {
 			const element = document.createElement("li");
 			element.classList.add("modal__task");
 			element.innerHTML = `
-				<input class="modal__task-input" id="${this.id}" type="checkbox" name="${this.id}"/>
-				<label class="modal__task-label" for="${this.id}">
+				<input class="modal__task-input" id="${this.id}" type="checkbox" name="${this.id}" ${this.checkbox}/>
+				<label class="modal__task-label ${this.checkbox}" for="${this.id}">
 					${this.description}
 				</label>
 				<button class="modal__task-delete" type='button'></button>
@@ -60,6 +63,7 @@ window.addEventListener("DOMContentLoaded", () => {
 		}
 	}
 
+	//Получение данных с сервера.
 	async function getData(url) {
 		const response = await fetch(url);
 
@@ -69,9 +73,10 @@ window.addEventListener("DOMContentLoaded", () => {
 	function callGetData(url) {
 		getData(url)
 			.then(response => {
+				console.log(response);
 				document.querySelector(".modal__tasks").innerHTML = ``;
-				response.forEach(({ task, id }) => {
-					new Task(task, id, ".modal__tasks").render();
+				response.forEach(({ task, id, checkbox }) => {
+					new Task(task, id, checkbox, ".modal__tasks").render();
 				});
 			})
 			.catch(error => {
@@ -79,6 +84,7 @@ window.addEventListener("DOMContentLoaded", () => {
 			});
 	}
 
+	//Удаление данных с сервера.
 	async function deleteData(url) {
 		const response = await fetch(url, {
 			method: "DELETE",
@@ -105,12 +111,64 @@ window.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 
+	//Изменение данных на сервере.
+	async function patchDataChecked(url) {
+		const response = await fetch(url, {
+			method: "PATCH",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({
+				checkbox: "checked",
+			}),
+		});
+
+		return await response.json();
+	}
+
+	async function patchDataIsChecked(url) {
+		const response = await fetch(url, {
+			method: "PATCH",
+			headers: {
+				"Content-type": "application/json",
+			},
+			body: JSON.stringify({
+				checkbox: "",
+			}),
+		});
+
+		return await response.json();
+	}
+
 	ul.addEventListener("change", event => {
 		const checkbox = event.target.className === "modal__task-input";
+		const checkboxId = event.target.id;
+		const checkboxCheck = event.target.checked;
 
 		if (checkbox) {
-			const label = event.target.nextElementSibling;
-			label.classList.toggle("checked");
+			if (checkboxCheck == true) {
+				patchDataChecked(`http://localhost:3000/requests/${checkboxId}`)
+					.then(response => {
+						console.log(response);
+					})
+					.catch(error => {
+						console.log(error);
+					})
+					.finally(() => {
+						callGetData("http://localhost:3000/requests");
+					});
+			} else {
+				patchDataIsChecked(`http://localhost:3000/requests/${checkboxId}`)
+					.then(response => {
+						console.log(response);
+					})
+					.catch(error => {
+						console.log(error);
+					})
+					.finally(() => {
+						callGetData("http://localhost:3000/requests");
+					});
+			}
 		}
 	});
 });
